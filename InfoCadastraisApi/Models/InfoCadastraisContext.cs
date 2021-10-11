@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace InfoCadastraisApi.Models
 {
     public class InfoCadastraisContext : DbContext
     {
-        public InfoCadastraisContext(DbContextOptions<Prestador> options)
+        public InfoCadastraisContext(DbContextOptions<InfoCadastraisContext> options)
             : base(options)
         {
         }

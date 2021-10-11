@@ -31,7 +31,7 @@ namespace InfoCadastraisApi
 
             services.AddControllers();
 
-            services.AddDbContext<InfoCadastraisContext>(opt =>
+            services.AddDbContext<InfosCadastraisContext>(opt =>
                                                opt.UseInMemoryDatabase("InfoCadastrais"));
 
             services.AddSwaggerGen(c =>
