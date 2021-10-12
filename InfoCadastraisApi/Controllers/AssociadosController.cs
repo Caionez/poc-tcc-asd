@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,30 +39,6 @@ namespace InfoCadastraisApi.Controllers
             return associado;
         }
 
-        // PUT: api/Associados/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAssociado(int id, Associado associado)
-        {
-            if (id != associado.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(associado).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) when (!AssociadoExists(id))
-            {
-                return NotFound();
-            }
-             
-            return NoContent();
-        }
-
         // POST: api/Associados
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -89,11 +64,6 @@ namespace InfoCadastraisApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool AssociadoExists(int id)
-        {
-            return _context.Associados.Any(e => e.Id == id);
         }
     }
 }

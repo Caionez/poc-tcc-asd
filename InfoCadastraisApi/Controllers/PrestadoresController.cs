@@ -15,10 +15,12 @@ namespace InfoCadastraisApi.Controllers
     public class PrestadoresController : ControllerBase
     {
         private readonly InfosCadastraisContext _context;
+        private readonly IInfosCadastraisBroker _broker;
 
-        public PrestadoresController(InfosCadastraisContext context)
+        public PrestadoresController(InfosCadastraisContext context, IInfosCadastraisBroker broker)
         {
             _context = context;
+            _broker = broker;
         }
 
         // GET: api/Prestador
@@ -58,7 +60,7 @@ namespace InfoCadastraisApi.Controllers
                 prestadores = _context.Prestadores.Where(p => p.Especialidades.Contains(especialidade));
             }
             else
-                prestadores = null; //_broker.BuscarPrestadoresPorEspecialidade(especialidade);
+                prestadores = await _broker.BuscarPrestadoresPorEspecialidade(nomeEspecialidade);
 
             if (prestadores == null)
                 return NotFound();

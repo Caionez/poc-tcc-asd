@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using InfoCadastraisApi.Models;
 using InfoCadastraisApi.Data;
+using System.Threading.Tasks;
 
 namespace InfoCadastraisApi.Controllers
 {
@@ -9,17 +10,17 @@ namespace InfoCadastraisApi.Controllers
     [ApiController]
     public class ConveniadosController : ControllerBase
     {
-        private readonly BrokerInfosCadastrais _broker;
-        public ConveniadosController(BrokerInfosCadastrais broker)
+        private readonly InfosCadastraisBroker _broker;
+        public ConveniadosController(InfosCadastraisBroker broker)
         {
             _broker = broker;
         }
 
         // GET: api/Conveniados
         [HttpGet]
-        public ActionResult<IEnumerable<Conveniado>> GetConveniados()
+        public async Task<ActionResult<IEnumerable<Conveniado>>> GetConveniados()
         {
-            return Ok(_broker.BuscarConveniados());
+            return Ok(await _broker.BuscarConveniados());
         }
     }
 }
