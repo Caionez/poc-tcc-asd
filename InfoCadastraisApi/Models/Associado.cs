@@ -1,15 +1,16 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace InfoCadastraisApi.Models
 {
-    public class Prestador
+    public class Associado
     {
         [Key]
         public int Id { get; set; }
         public string Nome { get; set; }
+        public DateTime DataNascimento { get; set; }
+        public bool Ativo { get; set; }
 
-        public ICollection<Especialidade> Especialidades { get; set; }
-        public Conveniado Conveniado { get; set; }
+        public PlanoAssociado Plano { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisApi.Models;
 using InfoCadastraisApi.DTOs;
+using InfoCadastraisApi.Data;
 
 namespace InfoCadastraisApi.Controllers
 {
@@ -26,22 +27,13 @@ namespace InfoCadastraisApi.Controllers
         {
             var prestadores = _context.Prestadores;
 
-            return await prestadores.Select(p => new PrestadorDTO 
-            {
-                Nome = p.Nome,
-                Especialidades = p.Especialidades.Select(e => new EspecialidadeDTO
-                    {
-                        Id = e.Id,
-                        Nome = e.Nome
-                    })
-                    .ToList()
-            })
-            .ToListAsync();
+            return await prestadores.Select(p => PrestadorParaDTO(p))
+                                    .ToListAsync();
         }
 
         // GET: api/Prestador/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prestador>> GetPrestador(int id)
+        public async Task<ActionResult<PrestadorDTO>> GetPrestador(int id)
         {
             var queryPrestador = _context.Prestadores
                                      .Where(p => p.Id == id)
@@ -52,34 +44,29 @@ namespace InfoCadastraisApi.Controllers
             if (prestador == null)
                 return NotFound();
             
-            return prestador;
+            return PrestadorParaDTO(prestador);
         }
 
         [HttpGet("{contexto}/{nomeEspecialidade}")]
-        public async Task<ActionResult<IEnumerable<Prestador>>> GetPrestadoresPorEspecialidade([FromRoute]ContextoBusca contexto, [FromRoute]string nomeEspecialidade)
+        public async Task<ActionResult<IEnumerable<PrestadorDTO>>> GetPrestadoresPorEspecialidade([FromRoute]ContextoBusca contexto, [FromRoute]string nomeEspecialidade)
         {
             IEnumerable<Prestador> prestadores;
 
             if (contexto == ContextoBusca.InfosCadastrais)
             {
-                prestadores = await (from p in _context.Prestadores
-                                  from e in _context.Especialidades
-                                  where e.Nome == nomeEspecialidade
-                                  select p).ToListAsync();
+                var especialidade = await _context.Especialidades.Where(e => e.Nome == nomeEspecialidade).FirstOrDefaultAsync();
+                prestadores = _context.Prestadores.Where(p => p.Especialidades.Contains(especialidade));
             }
             else
                 prestadores = null; //_broker.BuscarPrestadoresPorEspecialidade(especialidade);
 
             if (prestadores == null)
-            {
                 return NotFound();
-            }
 
-            return Ok(prestadores);
+            return Ok(prestadores.Select(p => PrestadorParaDTO(p)));
         }
 
         // PUT: api/Prestador/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPrestador(int id, PrestadorDTO prestadorDTO)
         {
@@ -114,7 +101,6 @@ namespace InfoCadastraisApi.Controllers
         }
 
         // POST: api/Prestador
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Prestador>> PostPrestador(PrestadorDTO prestadorDTO)
         {
@@ -153,5 +139,17 @@ namespace InfoCadastraisApi.Controllers
         {
             return _context.Prestadores.Any(e => e.Id == id);
         }
+
+        private static PrestadorDTO PrestadorParaDTO(Prestador p) =>
+            new PrestadorDTO
+            {
+                Id = p.Id,
+                Nome = p.Nome,
+                Especialidades = p.Especialidades?.Select(e => new EspecialidadeDTO
+                {
+                    Id = e.Id,
+                    Nome = e.Nome
+                }).ToList()
+            };
     }
 }

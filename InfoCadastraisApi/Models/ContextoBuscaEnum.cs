@@ -1,4 +1,3 @@
-
 namespace InfoCadastraisApi.Models
 {
     public enum ContextoBusca

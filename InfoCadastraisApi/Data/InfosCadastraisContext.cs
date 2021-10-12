@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisApi.Models;
 
+namespace InfoCadastraisApi.Data
+{
     public class InfosCadastraisContext : DbContext
     {
         public InfosCadastraisContext (DbContextOptions<InfosCadastraisContext> options)
@@ -14,4 +12,6 @@ using InfoCadastraisApi.Models;
 
         public DbSet<Prestador> Prestadores { get; set; }
         public DbSet<Especialidade> Especialidades { get; set; }
+        public DbSet<Associado> Associados { get; set; }
     }
+}
