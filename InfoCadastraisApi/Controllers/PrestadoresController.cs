@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisApi.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace InfoCadastraisApi.Controllers
 {
@@ -39,6 +40,32 @@ namespace InfoCadastraisApi.Controllers
             }
 
             return prestador;
+        }
+
+        [HttpGet("{contexto}/{nomeEspecialidade}")]
+        public async Task<ActionResult<IEnumerable<Prestador>>> GetPrestadoresPorEspecialidade([FromRoute]ContextoBusca contexto, [FromRoute]string nomeEspecialidade)
+        {
+            IEnumerable<Prestador> prestadores;
+
+            if (contexto == ContextoBusca.InfosCadastrais)
+            {
+                prestadores = await (from p in _context.Prestadores
+                                  from ep in p.Especialidades
+                                  from e in _context.Especialidades
+                                  where e.Nome == nomeEspecialidade
+                                        && e.Id == ep.IdEspecialidade
+                                        && ep.IdPrestador == p.Id
+                                  select p).ToListAsync();
+            }
+            else
+                prestadores = null; //_broker.BuscarPrestadoresPorEspecialidade(especialidade);
+
+            if (prestadores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(prestadores);
         }
 
         // PUT: api/Prestador/5
