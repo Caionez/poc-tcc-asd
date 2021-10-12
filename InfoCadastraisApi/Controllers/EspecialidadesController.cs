@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisApi.Models;
+using InfoCadastraisApi.DTOs;
 
 namespace InfoCadastraisApi.Controllers
 {
@@ -22,9 +23,12 @@ namespace InfoCadastraisApi.Controllers
 
         // GET: api/Especialidades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Especialidade>>> GetEspecialidades()
+        public async Task<ActionResult<IEnumerable<EspecialidadeDTO>>> GetEspecialidades()
         {
-            return await _context.Especialidades.ToListAsync();
+            var especialidades = _context.Especialidades;
+
+            return await especialidades.Select(e => EspecialidadeParaDTO(e))
+            .ToListAsync();
         }
 
         // GET: api/Especialidades/5
@@ -44,29 +48,25 @@ namespace InfoCadastraisApi.Controllers
         // PUT: api/Especialidades/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEspecialidade(int id, Especialidade especialidade)
+        public async Task<IActionResult> PutEspecialidade(int id, EspecialidadeDTO especialidadeDTO)
         {
-            if (id != especialidade.Id)
-            {
+            if (id != especialidadeDTO.Id)
                 return BadRequest();
-            }
+            
+            var especialidade = await _context.Especialidades.FindAsync(id);
+            
+            if (especialidade == null)
+                return NotFound();
 
-            _context.Entry(especialidade).State = EntityState.Modified;
+            especialidade.Nome = especialidadeDTO.Nome;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EspecialidadeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+            catch (DbUpdateConcurrencyException) when (!EspecialidadeExists(id))
+            {   
+                return NotFound();
             }
 
             return NoContent();
@@ -75,8 +75,13 @@ namespace InfoCadastraisApi.Controllers
         // POST: api/Especialidades
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Especialidade>> PostEspecialidade(Especialidade especialidade)
+        public async Task<ActionResult<Especialidade>> PostEspecialidade(EspecialidadeDTO especialidadeDTO)
         {
+            var especialidade = new Especialidade
+            { 
+                Nome = especialidadeDTO.Nome
+            };
+
             _context.Especialidades.Add(especialidade);
             await _context.SaveChangesAsync();
 
@@ -103,5 +108,12 @@ namespace InfoCadastraisApi.Controllers
         {
             return _context.Especialidades.Any(e => e.Id == id);
         }
+
+        private static EspecialidadeDTO EspecialidadeParaDTO(Especialidade especialidade) =>
+            new EspecialidadeDTO 
+            {
+                Id = especialidade.Id,
+                Nome = especialidade.Nome
+            };
     }
 }

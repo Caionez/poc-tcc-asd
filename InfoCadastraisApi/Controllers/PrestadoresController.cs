@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisApi.Models;
-using System.ComponentModel.DataAnnotations;
+using InfoCadastraisApi.DTOs;
 
 namespace InfoCadastraisApi.Controllers
 {
@@ -23,10 +22,21 @@ namespace InfoCadastraisApi.Controllers
 
         // GET: api/Prestador
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Prestador>>> GetPrestadores()
+        public async Task<ActionResult<IEnumerable<PrestadorDTO>>> GetPrestadores()
         {
-            return await _context.Prestadores
-                                 .ToListAsync();
+            var prestadores = _context.Prestadores;
+
+            return await prestadores.Select(p => new PrestadorDTO 
+            {
+                Nome = p.Nome,
+                Especialidades = p.Especialidades.Select(e => new EspecialidadeDTO
+                    {
+                        Id = e.Id,
+                        Nome = e.Nome
+                    })
+                    .ToList()
+            })
+            .ToListAsync();
         }
 
         // GET: api/Prestador/5
@@ -35,7 +45,7 @@ namespace InfoCadastraisApi.Controllers
         {
             var queryPrestador = _context.Prestadores
                                      .Where(p => p.Id == id)
-                                     .Include(p => p.EspecialidadesPrestador);
+                                     .Include(p => p.Especialidades);
 
             var prestador = await queryPrestador.FirstOrDefaultAsync();
             
@@ -53,11 +63,8 @@ namespace InfoCadastraisApi.Controllers
             if (contexto == ContextoBusca.InfosCadastrais)
             {
                 prestadores = await (from p in _context.Prestadores
-                                  from ep in p.EspecialidadesPrestador
                                   from e in _context.Especialidades
                                   where e.Nome == nomeEspecialidade
-                                        && e.Id == ep.IdEspecialidade
-                                        && ep.IdPrestador == p.Id
                                   select p).ToListAsync();
             }
             else
@@ -74,32 +81,36 @@ namespace InfoCadastraisApi.Controllers
         // PUT: api/Prestador/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrestador(int id, Prestador prestador)
+        public async Task<IActionResult> PutPrestador(int id, PrestadorDTO prestadorDTO)
         {
-            if (id != prestador.Id)
-            {
+            if (id != prestadorDTO.Id)
                 return BadRequest();
-            }
+            
+            var prestador = await _context.Prestadores
+                                          .Where(p => p.Id == id)
+                                          .Include(p => p.Especialidades)
+                                          .FirstOrDefaultAsync();
+            
+            if (prestador == null)
+                return NotFound();
 
-            _context.Entry(prestador).State = EntityState.Modified;
+            prestador.Nome = prestadorDTO.Nome;
+            prestador.Especialidades.Clear();
+
+            foreach(EspecialidadeDTO esp in prestadorDTO.Especialidades)
+                prestador.Especialidades.Add(_context.Especialidades.Find(esp.Id));
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PrestadorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+            catch (DbUpdateConcurrencyException) when (!PrestadorExists(id))
+            {   
+                return NotFound();
             }
 
             return NoContent();
+
         }
 
         // POST: api/Prestador

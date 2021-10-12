@@ -9,6 +9,6 @@ namespace InfoCadastraisApi.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         
-        public ICollection<EspecialidadePrestador> EspecialidadePrestador { get; set; }
+        public ICollection<Prestador> Prestadores { get; set; }
     }
 }
