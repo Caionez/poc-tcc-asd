@@ -25,20 +25,23 @@ namespace InfoCadastraisApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Prestador>>> GetPrestadores()
         {
-            return await _context.Prestadores.ToListAsync();
+            return await _context.Prestadores
+                                 .ToListAsync();
         }
 
         // GET: api/Prestador/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Prestador>> GetPrestador(int id)
         {
-            var prestador = await _context.Prestadores.FindAsync(id);
+            var queryPrestador = _context.Prestadores
+                                     .Where(p => p.Id == id)
+                                     .Include(p => p.EspecialidadesPrestador);
 
+            var prestador = await queryPrestador.FirstOrDefaultAsync();
+            
             if (prestador == null)
-            {
                 return NotFound();
-            }
-
+            
             return prestador;
         }
 
@@ -50,7 +53,7 @@ namespace InfoCadastraisApi.Controllers
             if (contexto == ContextoBusca.InfosCadastrais)
             {
                 prestadores = await (from p in _context.Prestadores
-                                  from ep in p.Especialidades
+                                  from ep in p.EspecialidadesPrestador
                                   from e in _context.Especialidades
                                   where e.Nome == nomeEspecialidade
                                         && e.Id == ep.IdEspecialidade
