@@ -116,8 +116,17 @@ namespace InfoCadastraisApi.Controllers
         // POST: api/Prestador
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Prestador>> PostPrestador(Prestador prestador)
+        public async Task<ActionResult<Prestador>> PostPrestador(PrestadorDTO prestadorDTO)
         {
+            Prestador prestador = new Prestador
+            {
+                Nome = prestadorDTO.Nome,
+                Especialidades = new List<Especialidade>()
+            };
+
+            foreach(EspecialidadeDTO esp in prestadorDTO.Especialidades)
+                prestador.Especialidades.Add(_context.Especialidades.Find(esp.Id));
+
             _context.Prestadores.Add(prestador);
             await _context.SaveChangesAsync();
 
