@@ -16,7 +16,7 @@ namespace InfoCadastraisApi.Data
     public class InfosCadastraisBroker : IInfosCadastraisBroker
     {
         private readonly HttpClient _client;
-        private const string UrlBroker = "https://localhost:5002/api";
+        private const string UrlBroker = "https://localhost:5003/api/broker";
         private readonly string RecursoBuscaConveniados = $"{UrlBroker}/conveniados";
         private readonly string RecursoBuscaConsultasPorConveniados = $"{UrlBroker}/consultas/";
         private readonly string RecursoBuscaPrestadoresPorEspecialidade = $"{UrlBroker}/prestadores/";
