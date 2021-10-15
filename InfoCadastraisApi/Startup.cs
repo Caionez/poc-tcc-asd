@@ -23,11 +23,10 @@ namespace InfoCadastraisApi
         {
 
             services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<InfosCadastraisContext>(opt =>
-                                               opt.UseInMemoryDatabase("InfoCadastrais"));
+                opt.UseInMemoryDatabase("InfoCadastrais"));
 
             services.AddSingleton<IInfosCadastraisBroker, InfosCadastraisBroker>();
 
