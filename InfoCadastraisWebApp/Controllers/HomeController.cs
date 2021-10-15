@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using InfoCadastraisWebApp.Models;
+using InfoCadastraisWebApp.ViewModels;
 
 namespace InfoCadastraisWebApp.Controllers
 {
@@ -25,9 +26,28 @@ namespace InfoCadastraisWebApp.Controllers
         }
 
         [Authorize]
-        public IActionResult Privacy()
+        public IActionResult ConsultaPrestador()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult ConsultarPrestador([Bind("Especialidade,BuscaExterna")] ConsultaPrestadorViewModel busca)
+        {
+            var model = new ConsultaPrestadorViewModel {
+                PrestadoresEncontrados = new List<Prestador>() {
+                    new Prestador 
+                    {
+                        Nome = "José Silva",
+                        Conveniado = new Conveniado 
+                        {
+                            Nome = "Teste", Endereco = "Teste"
+                        }
+                    }
+                }
+            };
+
+            return View("ConsultaPrestador", model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
