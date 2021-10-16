@@ -66,7 +66,9 @@ namespace InfoCadastraisWebApp.Repositories
                 prestadores = _context.Prestadores.Where(p => p.Especialidades.Contains(especialidade));
             }
             else
+            {
                 prestadores = await _broker.BuscarPrestadoresPorEspecialidade(nomeEspecialidade);
+            }
 
             if (prestadores == null) return null;
 
@@ -101,6 +103,7 @@ namespace InfoCadastraisWebApp.Repositories
         {
             Prestador prestador = new()
             {
+                Id = prestadorDTO.Id,
                 Nome = prestadorDTO.Nome,
                 Especialidades = new List<Especialidade>()
             };
@@ -130,7 +133,7 @@ namespace InfoCadastraisWebApp.Repositories
         }
 
         private static PrestadorDTO PrestadorParaDTO(Prestador p) =>
-            new PrestadorDTO
+            new()
             {
                 Id = p.Id,
                 Nome = p.Nome,

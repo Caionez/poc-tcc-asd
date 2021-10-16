@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using InfoCadastraisWebApp.Data;
 using InfoCadastraisWebApp.Repositories;
@@ -37,10 +32,7 @@ namespace InfoCadastraisWebApp
 
             services.AddControllersWithViews();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "InfoCadastraisApi", Version = "v1" });
-            });
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "InfoCadastraisApi", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +83,7 @@ namespace InfoCadastraisWebApp
                 .AddEntityFrameworkStores<InfoCadastraisIdentityDbContext>();
         }
 
-        private void ConfigureIdentity(IServiceCollection services)
+        private static void ConfigureIdentity(IServiceCollection services)
         {
             services.Configure<IdentityOptions>(options =>
             {
@@ -126,7 +118,7 @@ namespace InfoCadastraisWebApp
             });
         }
 
-        private void RegisterDependencies(IServiceCollection services)
+        private static void RegisterDependencies(IServiceCollection services)
         {
             services.AddSingleton<IInfosCadastraisBroker, InfosCadastraisBroker>();
             services.AddScoped<IPrestadorRepository, PrestadorRepository>();
