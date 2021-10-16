@@ -63,7 +63,8 @@ namespace InfoCadastraisWebApp.Repositories
             if (contexto == ContextoBusca.InfosCadastrais)
             {
                 var especialidade = await _context.Especialidades.Where(e => e.Nome == nomeEspecialidade).FirstOrDefaultAsync();
-                prestadores = _context.Prestadores.Where(p => p.Especialidades.Contains(especialidade));
+                prestadores = _context.Prestadores.Where(p => p.Especialidades.Contains(especialidade))
+                                      .Include(p => p.Conveniado);
             }
             else
             {
@@ -84,8 +85,11 @@ namespace InfoCadastraisWebApp.Repositories
             prestador.Nome = prestadorDTO.Nome;
             prestador.Especialidades.Clear();
 
-            foreach(EspecialidadeDTO esp in prestadorDTO.Especialidades)
+            foreach (EspecialidadeDTO esp in prestadorDTO.Especialidades)
                 prestador.Especialidades.Add(_context.Especialidades.Find(esp.Id));
+
+            if (prestadorDTO.Conveniado?.Id != 0)
+                prestador.Conveniado = _context.Conveniados.Find(prestadorDTO.Conveniado.Id);
 
             try
             {
@@ -108,8 +112,11 @@ namespace InfoCadastraisWebApp.Repositories
                 Especialidades = new List<Especialidade>()
             };
 
-            foreach(EspecialidadeDTO esp in prestadorDTO.Especialidades)
+            foreach (EspecialidadeDTO esp in prestadorDTO.Especialidades)
                 prestador.Especialidades.Add(_context.Especialidades.Find(esp.Id));
+
+            if (prestadorDTO.Conveniado?.Id != 0)
+                prestador.Conveniado = _context.Conveniados.Find(prestadorDTO.Conveniado.Id);
 
             _context.Prestadores.Add(prestador);
             await _context.SaveChangesAsync();
@@ -122,7 +129,7 @@ namespace InfoCadastraisWebApp.Repositories
             if (prestador == null)
                 return false;
 
-             _context.Prestadores.Remove(prestador);
+            _context.Prestadores.Remove(prestador);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -141,7 +148,14 @@ namespace InfoCadastraisWebApp.Repositories
                 {
                     Id = e.Id,
                     Nome = e.Nome
-                }).ToList()
+                }).ToList(),
+                Conveniado = p.Conveniado == null ?
+                    null :
+                    new ConveniadoDTO
+                    {
+                        Nome = p.Conveniado.Nome,
+                        Endereco = p.Conveniado.Endereco
+                    }
             };
     }
 }

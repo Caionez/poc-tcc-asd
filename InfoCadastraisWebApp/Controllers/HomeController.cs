@@ -8,11 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using InfoCadastraisWebApp.Models;
 using InfoCadastraisWebApp.ViewModels;
+using InfoCadastraisWebApp.Repositories;
 
 namespace InfoCadastraisWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IPrestadorRepository _repository;
+        public HomeController(IPrestadorRepository repository)
+        {
+            _repository = repository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -25,19 +32,14 @@ namespace InfoCadastraisWebApp.Controllers
         }
 
         [Authorize]
-        public IActionResult ConsultarPrestador([Bind("Especialidade,BuscaExterna")] ConsultaPrestadorViewModel busca)
+        public async Task<IActionResult> ConsultarPrestador([Bind("Especialidade,BuscaExterna")]ConsultaPrestadorViewModel busca)
         {
+            ContextoBusca contexto = busca.BuscaExterna ? ContextoBusca.Externo : ContextoBusca.InfosCadastrais;
+
+            var prestadores = await _repository.ListarPrestadoresPorEspecialidade(contexto, busca.Especialidade);
+
             var model = new ConsultaPrestadorViewModel {
-                PrestadoresEncontrados = new List<Prestador>() {
-                    new Prestador
-                    {
-                        Nome = "José Silva",
-                        Conveniado = new Conveniado
-                        {
-                            Nome = "Teste", Endereco = "Teste"
-                        }
-                    }
-                }
+                PrestadoresEncontrados = prestadores.ToList()
             };
 
             return View("ConsultaPrestador", model);

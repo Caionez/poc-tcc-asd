@@ -3,14 +3,16 @@ using System;
 using InfoCadastraisWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InfoCadastraisWebApp.Migrations
+namespace InfoCadastraisWebApp.Data.Migrations
 {
     [DbContext(typeof(InfoCadastraisContext))]
-    partial class InfoCadastraisContextModelSnapshot : ModelSnapshot
+    [Migration("20211016191901_Conveniados")]
+    partial class Conveniados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -19,6 +19,7 @@ namespace InfoCadastraisWebApp.Data
 
         public DbSet<Prestador> Prestadores { get; set; }
         public DbSet<Especialidade> Especialidades { get; set; }
+        public DbSet<Conveniado> Conveniados { get; set; }
         public DbSet<Associado> Associados { get; set; }
         public DbSet<Consulta> Consulta { get; set; }
     }
