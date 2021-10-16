@@ -11,9 +11,9 @@ namespace InfoCadastraisWebApp.Controllers
     [ApiController]
     public class AssociadosController : ControllerBase
     {
-        private readonly InfosCadastraisContext _context;
+        private readonly InfoCadastraisContext _context;
 
-        public AssociadosController(InfosCadastraisContext context)
+        public AssociadosController(InfoCadastraisContext context)
         {
             _context = context;
         }

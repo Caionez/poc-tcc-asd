@@ -11,10 +11,10 @@ namespace InfoCadastraisWebApp.Controllers
     [ApiController]
     public class ConsultasController : ControllerBase
     {
-        private readonly InfosCadastraisContext _context;
+        private readonly InfoCadastraisContext _context;
         private readonly IInfosCadastraisBroker _broker;
 
-        public ConsultasController(InfosCadastraisContext context, IInfosCadastraisBroker broker)
+        public ConsultasController(InfoCadastraisContext context, IInfosCadastraisBroker broker)
         {
             _context = context;
             _broker = broker;

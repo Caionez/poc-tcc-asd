@@ -13,9 +13,9 @@ namespace InfoCadastraisWebApp.Controllers
     [ApiController]
     public class EspecialidadesController : ControllerBase
     {
-        private readonly InfosCadastraisContext _context;
+        private readonly InfoCadastraisContext _context;
 
-        public EspecialidadesController(InfosCadastraisContext context)
+        public EspecialidadesController(InfoCadastraisContext context)
         {
             _context = context;
         }
