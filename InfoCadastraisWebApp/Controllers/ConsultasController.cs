@@ -33,12 +33,7 @@ namespace InfoCadastraisWebApp.Controllers
         {
             var consulta = await _context.Consulta.FindAsync(id);
 
-            if (consulta == null)
-            {
-                return NotFound();
-            }
-
-            return consulta;
+            return consulta ?? (ActionResult<Consulta>)NotFound();
         }
 
         [HttpGet("{idConveniado}/{idAssociado}")]
@@ -64,6 +59,5 @@ namespace InfoCadastraisWebApp.Controllers
 
             return CreatedAtAction("GetConsulta", new { id = consulta.Id }, consulta);
         }
-
     }
 }

@@ -1,6 +1,9 @@
-public enum TipoPlano
+namespace InfoCadastraisWebApp.Models
 {
-    Enfermaria,
-    Apartamento,
-    Vip
+    public enum TipoPlano
+    {
+        Enfermaria,
+        Apartamento,
+        Vip
+    }
 }

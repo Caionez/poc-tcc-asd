@@ -48,9 +48,9 @@ namespace InfoCadastraisWebApp.Controllers
         {
             if (id != especialidadeDTO.Id)
                 return BadRequest();
-            
+
             var especialidade = await _context.Especialidades.FindAsync(id);
-            
+
             if (especialidade == null)
                 return NotFound();
 
@@ -61,7 +61,7 @@ namespace InfoCadastraisWebApp.Controllers
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) when (!EspecialidadeExists(id))
-            {   
+            {
                 return NotFound();
             }
 
@@ -73,7 +73,7 @@ namespace InfoCadastraisWebApp.Controllers
         public async Task<ActionResult<Especialidade>> PostEspecialidade(EspecialidadeDTO especialidadeDTO)
         {
             var especialidade = new Especialidade
-            { 
+            {
                 Nome = especialidadeDTO.Nome
             };
 
@@ -105,7 +105,7 @@ namespace InfoCadastraisWebApp.Controllers
         }
 
         private static EspecialidadeDTO EspecialidadeParaDTO(Especialidade especialidade) =>
-            new EspecialidadeDTO 
+            new()
             {
                 Id = especialidade.Id,
                 Nome = especialidade.Nome

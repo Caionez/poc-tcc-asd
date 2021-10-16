@@ -92,7 +92,7 @@ namespace InfoCadastraisWebApp.Repositories
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) when (!PrestadorExists(id))
-            {   
+            {
                 return false;
             }
 

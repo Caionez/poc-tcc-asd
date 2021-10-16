@@ -30,19 +30,17 @@ namespace InfoCadastraisWebApp.Controllers
         // GET: api/Prestador/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PrestadorDTO>> GetPrestador(int id)
-        {   
-            var prestador = await _repository.ObterPrestadorPorId(id);            
-            if (prestador == null)
-                return NotFound();
-            
-            return prestador;
+        {
+            var prestador = await _repository.ObterPrestadorPorId(id);
+
+            return prestador ?? (ActionResult<PrestadorDTO>)NotFound();
         }
 
         [HttpGet("{contexto}/{nomeEspecialidade}")]
         public async Task<ActionResult<IEnumerable<PrestadorDTO>>> GetPrestadoresPorEspecialidade([FromRoute]ContextoBusca contexto, [FromRoute]string nomeEspecialidade)
         {
             var prestadores = await _repository.ListarPrestadoresPorEspecialidade(contexto, nomeEspecialidade);
-            
+
             if (prestadores == null)
                 return NotFound();
 

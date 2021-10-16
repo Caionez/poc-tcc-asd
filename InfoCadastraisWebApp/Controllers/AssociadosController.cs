@@ -31,12 +31,7 @@ namespace InfoCadastraisWebApp.Controllers
         {
             var associado = await _context.Associados.FindAsync(id);
 
-            if (associado == null)
-            {
-                return NotFound();
-            }
-
-            return associado;
+            return associado ?? (ActionResult<Associado>)NotFound();
         }
 
         // POST: api/Associados

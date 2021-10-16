@@ -13,13 +13,6 @@ namespace InfoCadastraisWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -36,10 +29,10 @@ namespace InfoCadastraisWebApp.Controllers
         {
             var model = new ConsultaPrestadorViewModel {
                 PrestadoresEncontrados = new List<Prestador>() {
-                    new Prestador 
+                    new Prestador
                     {
                         Nome = "José Silva",
-                        Conveniado = new Conveniado 
+                        Conveniado = new Conveniado
                         {
                             Nome = "Teste", Endereco = "Teste"
                         }

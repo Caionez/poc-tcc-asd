@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InfoCadastraisWebAppMigrations
+namespace InfoCadastraisWebApp.Migrations
 {
     [DbContext(typeof(InfoCadastraisIdentityDbContext))]
     partial class InfoCadastraisIdentityDbContextModelSnapshot : ModelSnapshot

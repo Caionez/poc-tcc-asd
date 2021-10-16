@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InfoCadastraisWebAppMigrations
+namespace InfoCadastraisWebApp.Migrations
 {
-    [DbContext(typeof(InfoCadastraisIdentityDbContext))]
     [Migration("20211016174853_InitialCreate")]
     partial class InitialCreate
     {
