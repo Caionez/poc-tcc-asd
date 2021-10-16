@@ -1,0 +1,83 @@
+@using InfoCadastraisWebApp.DTOs
+@model InfoCadastraisWebApp.ViewModels.PesquisarConsultasAssociadosViewModel
+
+@{
+    ViewData["Title"] = "Pesquisar Consultas de Associados";
+}
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-6">
+        <section>
+            <form asp-controller="Pesquisar" asp-action="PesquisarConsultasAssociados" method="post">
+                <h5>Busque as consultas de Associados em um determinado prestador:</h5>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="IdAssociado">Associado</label>
+                    <select asp-for="IdAssociado" asp-items="@Model.Associados" class="selectpicker" data-live-search="true">
+                        <option>Buscar...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdConveniado">Conveniado</label>
+                    <select asp-for="IdConveniado" asp-items="@Model.Conveniados" class="selectpicker">
+                        <option>Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-6">
+@if (Model != null && Model.ConsultasEncontradas != null)
+{
+    @if (!Model.ConsultasEncontradas.Any())
+    {
+        <div class="alert alert-warning" role="alert">
+            Não foram encontradas Consultas para o Conveniado informado.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Data Consulta</th>
+                        <th>Prestador</th>
+                        <th>Especialidade</th>
+                        <th>Conveniado</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+        @foreach (var item in Model.ConsultasEncontradas) 
+        {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @item.DataConsulta.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NomePrestador)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NomeEspecialidade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NomeConveniado)
+                        </td>
+                    </tr>
+        }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+    </div>
+</div>

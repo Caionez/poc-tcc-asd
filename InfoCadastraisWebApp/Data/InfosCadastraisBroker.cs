@@ -28,7 +28,8 @@ namespace InfoCadastraisWebApp.Data
 
         public async Task<IEnumerable<Conveniado>> BuscarConveniados()
         {
-             HttpResponseMessage response = await _client.GetAsync(RecursoBuscaConveniados);
+            return new List<Conveniado>{ MockConveniado };
+            HttpResponseMessage response = await _client.GetAsync(RecursoBuscaConveniados);
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,6 +41,8 @@ namespace InfoCadastraisWebApp.Data
 
         public async Task<IEnumerable<Consulta>> BuscarConsultasAssociadoPorConveniado(int idConveniado, int idAssociado)
         {
+            return MockListaConsulta;
+            
             var url = $"{RecursoBuscaConsultasPorConveniados}/{idConveniado}/{idAssociado}";
 
             HttpResponseMessage response = await _client.GetAsync(url);
@@ -65,5 +68,27 @@ namespace InfoCadastraisWebApp.Data
 
             return null;
         }
+
+
+        private static readonly Conveniado MockConveniado = new() { Id = 1, Nome = "Clinica Sul" };
+        private readonly List<Consulta> MockListaConsulta = new()
+        {
+            new Consulta
+            {
+                Id = 1,
+                DataConsulta = System.DateTime.Today,
+                Conveniado = MockConveniado,
+                Especialidade =  new Especialidade { Nome = "Dermatologia" },
+                Prestador = new Prestador { Nome = "José Silva" }
+            },
+            new Consulta
+            {
+                Id = 2,
+                DataConsulta = System.DateTime.Today,
+                Conveniado = MockConveniado,
+                Especialidade = new Especialidade { Nome = "Clinica Médica" },
+                Prestador = new Prestador { Nome = "Maria Silva" }
+            }
+        };
     }
 }

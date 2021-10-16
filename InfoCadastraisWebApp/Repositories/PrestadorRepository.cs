@@ -83,6 +83,7 @@ namespace InfoCadastraisWebApp.Repositories
             if (prestador == null) return false;
 
             prestador.Nome = prestadorDTO.Nome;
+            prestador.Formacao = prestadorDTO.Formacao;
             prestador.Especialidades.Clear();
 
             foreach (EspecialidadeDTO esp in prestadorDTO.Especialidades)
@@ -109,6 +110,7 @@ namespace InfoCadastraisWebApp.Repositories
             {
                 Id = prestadorDTO.Id,
                 Nome = prestadorDTO.Nome,
+                Formacao = prestadorDTO.Formacao,
                 Especialidades = new List<Especialidade>()
             };
 
@@ -144,6 +146,7 @@ namespace InfoCadastraisWebApp.Repositories
             {
                 Id = p.Id,
                 Nome = p.Nome,
+                Formacao = p.Formacao,
                 Especialidades = p.Especialidades?.Select(e => new EspecialidadeDTO
                 {
                     Id = e.Id,

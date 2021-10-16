@@ -41,33 +41,38 @@
     }
     else
     {
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Conveniado</th>
-                    <th>Endereço Conveniado</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Formação</th>
+                        <th>Conveniado</th>
+                        <th>Endereço Conveniado</th>
+                    </tr>
+                </thead>
+                <tbody>
 
         @foreach (var item in Model.PrestadoresEncontrados) 
         {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Conveniado.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Conveniado.Endereco)
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Formacao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Conveniado.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Conveniado.Endereco)
+                        </td>
+                    </tr>
         }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     }
 }
     </div>

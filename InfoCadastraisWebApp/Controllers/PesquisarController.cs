@@ -6,15 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using InfoCadastraisWebApp.Models;
 using InfoCadastraisWebApp.ViewModels;
 using InfoCadastraisWebApp.Repositories;
+using InfoCadastraisWebApp.Data;
+using InfoCadastraisWebApp.DTOs;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InfoCadastraisWebApp.Controllers
 {
     public class PesquisarController : Controller
     {
-        private readonly IPrestadorRepository _repository;
-        public PesquisarController(IPrestadorRepository repository)
+        private readonly IPrestadorRepository _prestadorRepository;
+        private readonly IInfosCadastraisBroker _broker;
+        public PesquisarController(IPrestadorRepository prestadorRepository, IInfosCadastraisBroker broker)
         {
-            _repository = repository;
+            _prestadorRepository = prestadorRepository;
+            _broker = broker;
         }
 
         [Authorize]
@@ -24,17 +30,69 @@ namespace InfoCadastraisWebApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> PesquisarPrestadores([Bind("Especialidade,BuscaExterna")]PesquisarPrestadorViewModel busca)
+        public async Task<IActionResult> ConsultasAssociados()
+        {
+            var conveniadosDto = (await _broker.BuscarConveniados()).Select(c => ConveniadoParaDTO(c)).ToList();
+
+            PesquisarConsultasAssociadosViewModel model = new()
+            {
+                Associados = new SelectList(MockAssociados, "Id", "Nome"),
+                Conveniados = new SelectList(conveniadosDto, "Id", "Nome")
+            };
+
+            return View("PesquisarConsultasAssociados", model);
+        }
+
+        private readonly List<AssociadoDTO> MockAssociados = new()
+        {
+            new AssociadoDTO { Id = 1, Nome = "Rayane Sousa" },
+            new AssociadoDTO { Id = 2, Nome = "José Maria" },
+            new AssociadoDTO { Id = 2, Nome = "Rubens Sousa" }
+        };
+
+        [Authorize]
+        public async Task<IActionResult> PesquisarPrestadores([Bind("Especialidade,BuscaExterna")] PesquisarPrestadorViewModel busca)
         {
             ContextoBusca contexto = busca.BuscaExterna ? ContextoBusca.Externo : ContextoBusca.InfosCadastrais;
 
-            var prestadores = await _repository.ListarPrestadoresPorEspecialidade(contexto, busca.Especialidade);
+            var prestadores = await _prestadorRepository.ListarPrestadoresPorEspecialidade(contexto, busca.Especialidade);
 
-            var model = new PesquisarPrestadorViewModel {
+            var model = new PesquisarPrestadorViewModel
+            {
                 PrestadoresEncontrados = prestadores.ToList()
             };
 
             return View("PesquisarPrestador", model);
         }
+
+        [Authorize]
+        public async Task<IActionResult> PesquisarConsultasAssociados([Bind("IdAssociado,IdConveniado")] PesquisarConsultasAssociadosViewModel busca)
+        {
+            var consultas = await _broker.BuscarConsultasAssociadoPorConveniado(busca.IdConveniado, busca.IdAssociado);
+
+            var model = new PesquisarConsultasAssociadosViewModel
+            {
+                ConsultasEncontradas = consultas.Select(c => ConsultaParaDTO(c)).ToList()
+            };
+
+            return View("PesquisarConsultasAssociados", model);
+        }
+
+        private static ConveniadoDTO ConveniadoParaDTO(Conveniado c) =>
+        new()
+        {
+            Id = c.Id,
+            Nome = c.Nome,
+            Endereco = c.Endereco
+        };
+        private static ConsultaDTO ConsultaParaDTO(Consulta c) =>
+            new()
+            {
+                Id = c.Id,
+                DataConsulta = c.DataConsulta,
+                NomePrestador = c.Prestador?.Nome,
+                NomeEspecialidade = c.Especialidade?.Nome,
+                NomeConveniado = c.Conveniado?.Nome
+            };
     }
 }
