@@ -32,15 +32,20 @@ namespace InfoCadastraisWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> ConsultasAssociados()
         {
+            PesquisarConsultasAssociadosViewModel model = await CarregarFiltrosConsultasAssociados();
+
+            return View("PesquisarConsultasAssociados", model);
+        }
+
+        private async Task<PesquisarConsultasAssociadosViewModel> CarregarFiltrosConsultasAssociados()
+        {
             var conveniadosDto = (await _broker.BuscarConveniados()).Select(c => ConveniadoParaDTO(c)).ToList();
 
-            PesquisarConsultasAssociadosViewModel model = new()
+            return new()
             {
                 Associados = new SelectList(MockAssociados, "Id", "Nome"),
                 Conveniados = new SelectList(conveniadosDto, "Id", "Nome")
             };
-
-            return View("PesquisarConsultasAssociados", model);
         }
 
         private readonly List<AssociadoDTO> MockAssociados = new()
@@ -69,11 +74,8 @@ namespace InfoCadastraisWebApp.Controllers
         public async Task<IActionResult> PesquisarConsultasAssociados([Bind("IdAssociado,IdConveniado")] PesquisarConsultasAssociadosViewModel busca)
         {
             var consultas = await _broker.BuscarConsultasAssociadoPorConveniado(busca.IdConveniado, busca.IdAssociado);
-
-            var model = new PesquisarConsultasAssociadosViewModel
-            {
-                ConsultasEncontradas = consultas.Select(c => ConsultaParaDTO(c)).ToList()
-            };
+            var model = await CarregarFiltrosConsultasAssociados();
+            model.ConsultasEncontradas = consultas?.Select(c => ConsultaParaDTO(c)).ToList();
 
             return View("PesquisarConsultasAssociados", model);
         }

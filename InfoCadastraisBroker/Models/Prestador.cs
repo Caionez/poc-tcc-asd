@@ -9,7 +9,7 @@ namespace InfoCadastraisBroker.Models
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public ICollection<string> Especialidades { get; set; }
+        public ICollection<Especialidade> Especialidades { get; set; }
         public int IdConveniado { get; set; }
     }
 }

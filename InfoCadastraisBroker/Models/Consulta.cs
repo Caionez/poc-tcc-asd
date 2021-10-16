@@ -9,7 +9,8 @@ namespace InfoCadastraisBroker.Models
         public int Id { get; set; }
         public DateTime DataConsulta { get; set; }
         public Prestador Prestador { get; set; }
-        public string Especialidade { get; set; }
+        public Especialidade Especialidade { get; set; }
         public Conveniado Conveniado { get; set; }
+        public int IdAssociado { get; set; }
     }
 }
