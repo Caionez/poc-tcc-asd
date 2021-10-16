@@ -123,6 +123,5 @@ namespace InfoCadastraisWebApp
             services.AddSingleton<IInfosCadastraisBroker, InfosCadastraisBroker>();
             services.AddScoped<IPrestadorRepository, PrestadorRepository>();
         }
-
     }
 }
