@@ -4,7 +4,7 @@ using InfoCadastraisWebApp.DTOs;
 
 namespace InfoCadastraisWebApp.ViewModels
 {
-    public class ConsultaPrestadorViewModel
+    public class PesquisarPrestadorViewModel
     {
         public string Especialidade { get; set; }
 

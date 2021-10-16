@@ -7,7 +7,7 @@ using InfoCadastraisWebApp.Models;
 using InfoCadastraisWebApp.DTOs;
 using InfoCadastraisWebApp.Data;
 
-namespace InfoCadastraisWebApp.Controllers
+namespace InfoCadastraisWebApp.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

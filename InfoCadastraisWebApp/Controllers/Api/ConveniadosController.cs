@@ -5,7 +5,7 @@ using InfoCadastraisWebApp.Data;
 using System.Threading.Tasks;
 using InfoCadastraisWebApp.DTOs;
 
-namespace InfoCadastraisWebApp.Controllers
+namespace InfoCadastraisWebApp.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

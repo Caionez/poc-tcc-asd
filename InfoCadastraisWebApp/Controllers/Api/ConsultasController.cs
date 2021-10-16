@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using InfoCadastraisWebApp.Data;
 using InfoCadastraisWebApp.Models;
 
-namespace InfoCadastraisWebApp.Controllers
+namespace InfoCadastraisWebApp.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
