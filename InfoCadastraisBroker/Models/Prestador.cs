@@ -8,8 +8,8 @@ namespace InfoCadastraisBroker.Models
         [Key]
         public int Id { get; set; }
         public string Nome { get; set; }
-
+        public string Formacao { get; set; }
         public ICollection<Especialidade> Especialidades { get; set; }
-        public int IdConveniado { get; set; }
+        public Conveniado Conveniado { get; set; }
     }
 }

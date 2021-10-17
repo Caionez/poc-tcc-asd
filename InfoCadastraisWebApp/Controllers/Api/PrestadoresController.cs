@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using InfoCadastraisWebApp.Models;
@@ -20,13 +17,6 @@ namespace InfoCadastraisWebApp.Controllers.Api
             _repository = repository;
         }
 
-        // GET: api/Prestador
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PrestadorDTO>>> GetPrestadores()
-        {
-            return Ok(await _repository.ListarPrestadores());
-        }
-
         // GET: api/Prestador/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PrestadorDTO>> GetPrestador(int id)
@@ -34,17 +24,6 @@ namespace InfoCadastraisWebApp.Controllers.Api
             var prestador = await _repository.ObterPrestadorPorId(id);
 
             return prestador ?? (ActionResult<PrestadorDTO>)NotFound();
-        }
-
-        [HttpGet("{contexto}/{nomeEspecialidade}")]
-        public async Task<ActionResult<IEnumerable<PrestadorDTO>>> GetPrestadoresPorEspecialidade([FromRoute]ContextoBusca contexto, [FromRoute]string nomeEspecialidade)
-        {
-            var prestadores = await _repository.ListarPrestadoresPorEspecialidade(contexto, nomeEspecialidade);
-
-            if (prestadores == null)
-                return NotFound();
-
-            return Ok(prestadores);
         }
 
         // PUT: api/Prestador/5

@@ -54,7 +54,6 @@ namespace InfoCadastraisWebApp.Data
         public async Task<IEnumerable<Prestador>> BuscarPrestadoresPorEspecialidade(string nomeEspecialidade)
         {
             var url = $"{UrlBroker}/prestadores/{nomeEspecialidade}";
-
             HttpResponseMessage response = await _client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)

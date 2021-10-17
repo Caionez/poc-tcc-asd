@@ -121,6 +121,7 @@ namespace InfoCadastraisWebApp
         private static void RegisterDependencies(IServiceCollection services)
         {
             services.AddSingleton<IInfosCadastraisBroker, InfosCadastraisBroker>();
+            services.AddScoped<IAssociadoRepository, AssociadoRepository>();
             services.AddScoped<IPrestadorRepository, PrestadorRepository>();
         }
     }

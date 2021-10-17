@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,17 +7,18 @@ using InfoCadastraisWebApp.ViewModels;
 using InfoCadastraisWebApp.Repositories;
 using InfoCadastraisWebApp.Data;
 using InfoCadastraisWebApp.DTOs;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InfoCadastraisWebApp.Controllers
 {
     public class PesquisarController : Controller
     {
+        private readonly IAssociadoRepository _associadoRepository;
         private readonly IPrestadorRepository _prestadorRepository;
         private readonly IInfosCadastraisBroker _broker;
-        public PesquisarController(IPrestadorRepository prestadorRepository, IInfosCadastraisBroker broker)
+        public PesquisarController(IAssociadoRepository associadoRepository, IPrestadorRepository prestadorRepository, IInfosCadastraisBroker broker)
         {
+            _associadoRepository = associadoRepository;
             _prestadorRepository = prestadorRepository;
             _broker = broker;
         }
@@ -43,17 +43,10 @@ namespace InfoCadastraisWebApp.Controllers
 
             return new()
             {
-                Associados = new SelectList(MockAssociados, "Id", "Nome"),
+                Associados = new SelectList(await _associadoRepository.ListarAssociados(), "Id", "Nome"),
                 Conveniados = new SelectList(conveniadosDto, "Id", "Nome")
             };
         }
-
-        private readonly List<AssociadoDTO> MockAssociados = new()
-        {
-            new AssociadoDTO { Id = 1, Nome = "Rayane Sousa" },
-            new AssociadoDTO { Id = 2, Nome = "José Maria" },
-            new AssociadoDTO { Id = 2, Nome = "Rubens Sousa" }
-        };
 
         [Authorize]
         public async Task<IActionResult> PesquisarPrestadores([Bind("Especialidade,BuscaExterna")] PesquisarPrestadorViewModel busca)

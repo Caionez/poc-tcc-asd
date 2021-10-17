@@ -42,8 +42,7 @@ namespace InfoCadastraisBroker.Controllers
                 Prestador = new Prestador
                 {
                     Id = 1,
-                    Nome = "Alexandre Silva",
-                    IdConveniado = 1
+                    Nome = "Alexandre Silva"
                 },
                 Conveniado = new Conveniado
                 {
@@ -57,12 +56,11 @@ namespace InfoCadastraisBroker.Controllers
             {
                 Id = 451,
                 DataConsulta = DateTime.Now.AddDays(-10).Date,
-                Especialidade = new() { Nome = "Clinica Geral" },
+                Especialidade = new() { Nome = "Geral" },
                 Prestador = new Prestador
                 {
                     Id = 2,
-                    Nome = "Maria Goretti",
-                    IdConveniado = 1
+                    Nome = "Maria Goretti"
                 },
                 Conveniado = new Conveniado
                 {
@@ -74,14 +72,31 @@ namespace InfoCadastraisBroker.Controllers
             },
             new Consulta
             {
+                Id = 257,
+                DataConsulta = DateTime.Now.AddDays(-30).Date,
+                Especialidade = new() { Nome = "Dermatologia" },
+                Prestador = new Prestador
+                {
+                    Id = 3,
+                    Nome = "Mário Freitas"
+                },
+                Conveniado = new Conveniado
+                {
+                    Id = 2,
+                    Nome = "Centro Médico Lagoa",
+                    Endereco = "Rua Maria Goretti, N° 215, Lagoa"
+                },
+                IdAssociado = 1
+            },
+            new Consulta
+            {
                 Id = 451,
                 DataConsulta = DateTime.Now.AddDays(-40).Date,
-                Especialidade = new() { Nome = "Clinica Geral" },
+                Especialidade = new() { Nome = "Geral" },
                 Prestador = new Prestador
                 {
                     Id = 2,
-                    Nome = "Maria Goretti",
-                    IdConveniado = 1
+                    Nome = "Maria Goretti"
                 },
                 Conveniado = new Conveniado
                 {
@@ -99,15 +114,40 @@ namespace InfoCadastraisBroker.Controllers
             {
                 Id = 1,
                 Nome = "Alexandre Silva",
+                Formacao = "Especialista em Dermatologia pela UFVJ",
                 Especialidades = new List<Especialidade> { new() { Nome = "Dermatologia" } },
-                IdConveniado = 1
+                Conveniado = new Conveniado
+                {
+                    Id = 3,
+                    Nome = "Hospital Santo Américo",
+                    Endereco = "Avenida Principal, N° 152, Centro"
+                }
             },
             new Prestador
             {
                 Id = 2,
                 Nome = "Maria Goretti",
-                Especialidades = new List<Especialidade> { new() { Nome = "Clinica Geral" } },
-                IdConveniado = 1
+                Formacao = "Especialista em Clínica Geral pela USP",
+                Especialidades = new List<Especialidade> { new() { Nome = "Geral" } },
+                Conveniado = new Conveniado
+                {
+                    Id = 2,
+                    Nome = "Centro Médico Lagoa",
+                    Endereco = "Rua Maria Goretti, N° 215, Lagoa"
+                }
+            },
+            new Prestador
+            {
+                Id = 3,
+                Nome = "Mário Freitas",
+                Formacao = "Especialista em Clínica Geral pela USP",
+                Especialidades = new List<Especialidade> { new() { Nome = "Geral" } },
+                Conveniado = new Conveniado
+                {
+                    Id = 2,
+                    Nome = "Centro Médico Lagoa",
+                    Endereco = "Rua Maria Goretti, N° 215, Lagoa"
+                }
             }
         };
 
@@ -126,7 +166,7 @@ namespace InfoCadastraisBroker.Controllers
         [HttpGet("prestadores/{nomeEspecialidade}")]
         public IEnumerable<Prestador> BuscarPrestadoresPorEspecialidade([FromRoute] string nomeEspecialidade)
         {
-            return ListaPrestadores.Where(p => p.Especialidades.Contains(new Especialidade { Nome = nomeEspecialidade }));
+            return ListaPrestadores.Where(p => p.Especialidades.Any(e => e.Nome == nomeEspecialidade));
         }
     }
 }
