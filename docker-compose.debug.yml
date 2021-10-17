@@ -1,0 +1,27 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  infocadastraiswebapp:
+    image: infocadastraiswebapp
+    build:
+      context: .
+      dockerfile: ./InfoCadastraisWebApp/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+  infocadastraisbroker:
+    image: infocadastraisbroker
+    build:
+      context: .
+      dockerfile: ./InfoCadastraisBroker/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
