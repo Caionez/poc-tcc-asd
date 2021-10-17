@@ -5,8 +5,20 @@ version: '3.4'
 services:
   infocadastraiswebapp:
     image: infocadastraiswebapp
+    container_name: WebApp
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ./InfoCadastraisWebApp/
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - UrlBroker=http://192.168.1.64:5002/Broker
+
+  infocadastraisbroker:
+    image: infocadastraisbroker
+    container_name: Broker
+    build:
+      context: ./InfoCadastraisBroker/
+      dockerfile: Dockerfile
+    ports:
+      - 5002:5002

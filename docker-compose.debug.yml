@@ -5,22 +5,26 @@ version: '3.4'
 services:
   infocadastraiswebapp:
     image: infocadastraiswebapp
+    container_name: WebApp
     build:
-      context: .
-      dockerfile: ./InfoCadastraisWebApp/Dockerfile
+      context: ./InfoCadastraisWebApp/
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - UrlBroker=http://192.168.1.64:5002/Broker
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+
   infocadastraisbroker:
     image: infocadastraisbroker
+    container_name: Broker
     build:
-      context: .
-      dockerfile: ./InfoCadastraisBroker/Dockerfile
+      context: ./InfoCadastraisBroker/
+      dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - 5002:5002
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:

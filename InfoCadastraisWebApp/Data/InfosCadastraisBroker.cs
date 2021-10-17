@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using InfoCadastraisWebApp.Models;
-using System.Text.Json;
 using Newtonsoft.Json;
+using System;
 
 namespace InfoCadastraisWebApp.Data
 {
@@ -17,10 +17,7 @@ namespace InfoCadastraisWebApp.Data
     public class InfosCadastraisBroker : IInfosCadastraisBroker
     {
         private readonly HttpClient _client;
-        private const string UrlBroker = "https://localhost:5003/Broker";
-        private readonly string RecursoBuscaConveniados = $"{UrlBroker}/conveniados";
-        private readonly string RecursoBuscaConsultasPorConveniados = $"{UrlBroker}/consultas";
-        private readonly string RecursoBuscaPrestadoresPorEspecialidade = $"{UrlBroker}/prestadores/";
+        private readonly string UrlBroker = Environment.GetEnvironmentVariable("UrlBroker");
 
         public InfosCadastraisBroker()
         {
@@ -29,7 +26,7 @@ namespace InfoCadastraisWebApp.Data
 
         public async Task<IEnumerable<Conveniado>> BuscarConveniados()
         {
-            HttpResponseMessage response = await _client.GetAsync(RecursoBuscaConveniados);
+            HttpResponseMessage response = await _client.GetAsync($"{UrlBroker}/conveniados");
 
             if (response.IsSuccessStatusCode)
             {
@@ -41,7 +38,7 @@ namespace InfoCadastraisWebApp.Data
 
         public async Task<IEnumerable<Consulta>> BuscarConsultasAssociadoPorConveniado(int idConveniado, int idAssociado)
         {
-            var url = $"{RecursoBuscaConsultasPorConveniados}/{idConveniado}/{idAssociado}";
+            var url = $"{UrlBroker}/consultas/{idConveniado}/{idAssociado}";
 
             HttpResponseMessage response = await _client.GetAsync(url);
 
@@ -56,7 +53,7 @@ namespace InfoCadastraisWebApp.Data
 
         public async Task<IEnumerable<Prestador>> BuscarPrestadoresPorEspecialidade(string nomeEspecialidade)
         {
-            var url = $"{RecursoBuscaPrestadoresPorEspecialidade}/{nomeEspecialidade}";
+            var url = $"{UrlBroker}/prestadores/{nomeEspecialidade}";
 
             HttpResponseMessage response = await _client.GetAsync(url);
 
